@@ -37,7 +37,7 @@ function resolveDaysFromProduct(provider: Provider, productId?: string): number 
 // chama o PHP que aplica premium no MySQL
 async function callPhpPremium(email: string, days: number) {
   try {
-    const res = await fetch('https://portaldavida.pro/backend-php/webhook_premium.php', {
+    const res = await fetch('https://portaldavida.pro/api/webhook_premium.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, days })
@@ -112,3 +112,4 @@ export const subscriptionService = {
     };
   }
 };
+
