@@ -6,7 +6,8 @@ import { caktoRouter } from './src/services/webhooks/cakto';
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// middleware para JSON
+// middlewares globais de body
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // rotas de webhook
