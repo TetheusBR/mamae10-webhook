@@ -4,19 +4,23 @@ import { subscriptionService } from '../subscriptionService';
 
 export const caktoRouter = express.Router();
 
-// garante parsing de JSON para esse router
-caktoRouter.use(express.json());
-
 /**
  * Webhook da Cakto
- * URL final: https://seu-dominio.com/webhooks/cakto
+ * URL final: https://mamae10-webhook.onrender.com/webhooks/cakto
  * Configure essa URL no painel da Cakto.
  */
 caktoRouter.post('/cakto', async (req, res) => {
+  console.log('🚀 Webhook Cakto recebido');
+  console.log('Headers:', req.headers);
+  console.log('Raw body:', JSON.stringify(req.body));
+
   try {
     // ajuste "event" e "data" conforme o payload real da Cakto
     const event = req.body?.event || req.body?.type;
     const data = req.body?.data || req.body;
+
+    console.log('Event:', event);
+    console.log('Data extraída:', data);
 
     // tenta achar o email em diferentes campos comuns
     const email: string | undefined =
@@ -32,6 +36,7 @@ caktoRouter.post('/cakto', async (req, res) => {
       data?.offer_slug;
 
     if (!email) {
+      console.warn('Webhook Cakto sem e-mail identificável');
       return res
         .status(400)
         .json({ success: false, message: 'Email ausente no webhook da Cakto' });
@@ -98,14 +103,18 @@ caktoRouter.post('/cakto', async (req, res) => {
         break;
 
       default:
+        console.log('Evento Cakto não tratado, ignorando:', event);
         return res
           .status(200)
           .json({ success: true, message: `Evento ignorado: ${String(event)}` });
     }
 
+    console.log('Processamento Cakto concluído:', result);
     return res.status(200).json(result);
   } catch (err) {
     console.error('Erro no webhook Cakto:', err);
-    return res.status(500).json({ success: false, message: 'Erro interno no webhook Cakto' });
+    return res
+      .status(500)
+      .json({ success: false, message: 'Erro interno no webhook Cakto' });
   }
 });
