@@ -7,7 +7,10 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "dev:server": "ts-node --project tsconfig.server.json server.ts"
+
+    "dev:server": "ts-node --project tsconfig.server.json server.ts",
+    "build:server": "tsc -p tsconfig.server.json",
+    "start": "node dist-server/server.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.87.1",
